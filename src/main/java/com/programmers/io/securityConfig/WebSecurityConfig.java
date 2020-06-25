@@ -29,7 +29,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("/**").allowedOrigins("http://localhost:4200");
+				registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("GET", "POST", "PUT", "DELETE")
+				.allowedHeaders("Content-Type", "Date", "Total-Count", "loginInfo","jwt_token")
+                .exposedHeaders("Content-Type", "Date", "Total-Count", "loginInfo", "jwt_token")
+                .maxAge(3600);;
 			}
 		};
 	}
