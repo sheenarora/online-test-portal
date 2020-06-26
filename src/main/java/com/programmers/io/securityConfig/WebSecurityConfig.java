@@ -14,6 +14,9 @@ import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -27,17 +30,13 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
-//	public WebMvcConfigurer corsConfigurer() {
-//		return new WebMvcConfigurer() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**").allowedOrigins("http://localhost:4200").allowedMethods("GET", "POST", "PUT", "DELETE")
-//				.allowedHeaders("Content-Type", "Date", "Total-Count", "loginInfo","jwt_token")
-//                .exposedHeaders("Content-Type", "Date", "Total-Count", "loginInfo", "jwt_token")
-//                .maxAge(3600);;
-//			}
-//		};
-//	}
+//	@Bean
+//    CorsConfigurationSource corsConfigurationSource() {
+//        UrlBasedCorsConfigurationSource source = new
+//                UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+//        return source;
+//    }
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -61,7 +60,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity httpSecurity) throws Exception {
 		// We don't need CSRF for this example
-		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/login").permitAll().anyRequest()
+		httpSecurity.csrf().disable().authorizeRequests().antMatchers("/login").permitAll()
+		.antMatchers("/register").permitAll().anyRequest()
 				// dont authenticate this particular request
 				.authenticated().and().
 				// all other requests need to be authenticated

@@ -72,13 +72,10 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 
 		// user
 		User user = userRepository.findById(Long.parseLong(userId)).get();
-		// String name = user.getFirstName() + " " + user.getMiddleName() + " "
-		// + user.getLastName();
 		String name = user.getFirstName() + " " + user.getLastName();
 		examBean.setUserName(name);
 
 		// Exam Detail
-		//List<ExamDetail> examDetailList = examDetailRepository.findAllByExam(exam);
 		Set<ExamDetail> examDetailList = exam.getExamDetailList();
 
 		Map<Long, QuestionCategoryBean> QuestionCategoryMap = new HashMap<Long, QuestionCategoryBean>(0);
