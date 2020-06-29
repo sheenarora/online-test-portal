@@ -1,7 +1,6 @@
 package com.programmers.io.entities;
 
-import java.util.Date;
-import java.util.Set;
+import java.util.Date;	
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

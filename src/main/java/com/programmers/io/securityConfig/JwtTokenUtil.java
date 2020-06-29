@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import com.programmers.io.common.Constant;
-import com.programmers.io.entities.User;
 import com.programmers.io.repository.ExamRepository;
 import com.programmers.io.repository.UserRepository;
 
@@ -27,7 +25,7 @@ public class JwtTokenUtil implements Serializable {
 
 	@Value("${jwt.secret}")
 	private String secret;
-	
+
 	@Autowired
 	public UserRepository userRepository;
 
@@ -68,12 +66,13 @@ public class JwtTokenUtil implements Serializable {
 		return doGenerateToken(claims, emailId);
 	}
 
-	/* while creating the token -
-	 1. Define claims of the token, like Issuer, Expiration, Subject, and the ID
-	 2. Sign the JWT using the HS512 algorithm and secret key.
-	 3. According to JWS Compact
-	 Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-signature-41#section-3.1)
-	 compaction of the JWT to a URL-safe string*/
+	/*
+	 * while creating the token - 1. Define claims of the token, like Issuer,
+	 * Expiration, Subject, and the ID 2. Sign the JWT using the HS512 algorithm
+	 * and secret key. 3. According to JWS Compact
+	 * Serialization(https://tools.ietf.org/html/draft-ietf-jose-json-web-
+	 * signature-41#section-3.1) compaction of the JWT to a URL-safe string
+	 */
 	private String doGenerateToken(Map<String, Object> claims, String subject) {
 		return Jwts.builder().setClaims(claims).setSubject(subject).setIssuedAt(new Date(System.currentTimeMillis()))
 				.setExpiration(new Date(System.currentTimeMillis() + Constant.JWT_TOKEN_VALIDITY * 1000))
@@ -85,14 +84,13 @@ public class JwtTokenUtil implements Serializable {
 		final String username = getUsernameFromToken(token);
 		Claims claims = getAllClaimsFromToken(token);
 		String examId = (String) claims.get("ExamId");
-		String userId = (String) claims.get("UserId");	
+		String userId = (String) claims.get("UserId");
 		boolean error = false;
 		if (!examRepository.findById(Long.parseLong(examId)).isPresent()) {
 			error = true;
-		}			
-		else if (!userRepository.findById(Long.parseLong(userId)).isPresent()) {
+		} else if (!userRepository.findById(Long.parseLong(userId)).isPresent()) {
 			error = true;
 		}
-		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token)  && !error);
+		return (username.equals(userDetails.getUsername()) && !isTokenExpired(token) && !error);
 	}
 }

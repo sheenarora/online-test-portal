@@ -12,13 +12,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.io.bean.ExamBean;
 import com.programmers.io.bean.LoginBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;
 import com.programmers.io.securityConfig.JwtTokenUtil;
-import com.programmers.io.securityConfig.JwtUserDetailsService;
 import com.programmers.io.service.LoginService;
 
 @CrossOrigin(origins = "*")
@@ -51,7 +49,7 @@ public class LoginController {
 				Map<String, String> ClaimsMap = loginService.login(loginBean);
 				String examId = ClaimsMap.get("ExamId");
 				String userId = ClaimsMap.get("UserId");
-				
+
 				final String token = jwtTokenUtil.generateToken(emailId, userId, examId);
 				status.setMessage(token);
 			}

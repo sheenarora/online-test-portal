@@ -8,8 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,25 +27,25 @@ import io.jsonwebtoken.Claims;
 public class GetQuestionsController {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetQuestionsController.class);
-	
+
 	@Autowired
 	private GetQuestionsService getQuestionsService;
 
-	@PostMapping
+	@GetMapping
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<?> getQuestions(@RequestBody ExamBean examBean, HttpServletRequest request, HttpServletResponse response) {
-		LOGGER.info("API call: /getQuestions, Request :"+ examBean);
+	public ResponseEntity<?> getQuestions(HttpServletRequest request, HttpServletResponse response) {
+		LOGGER.info("API call: /getQuestions");
 
 		StatusBean status = new StatusBean();
+		ExamBean examBean = new ExamBean();
 
 		try {
-			
-			status = getQuestionsService.validateExamBean(examBean);
+			Claims claims = AppUtils.fetchClaimsFromToken(request);
+			String examId = (String) claims.get("ExamId");
+			String userId = (String) claims.get("UserId");
 			if (status.getCode() == 200) {
-				Claims claims = AppUtils.fetchClaimsFromToken(request);
-				String examId = (String) claims.get("ExamId");
-				String userId = (String) claims.get("UserId");
-				examBean = getQuestionsService.getQuestions(examBean, examId, userId);
+
+				examBean = getQuestionsService.getQuestions(examId, userId);
 				status.setCode(Constant.SUCCESS_CODE);
 				status.setMessage(Constant.SUCCESS_MESSAGE);
 				examBean.setStatus(status);
@@ -69,6 +68,5 @@ public class GetQuestionsController {
 		}
 		return ResponseEntity.ok(examBean);
 	}
-
 
 }

@@ -1,32 +1,17 @@
 package com.programmers.io.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.programmers.io.bean.ExamBean;
 import com.programmers.io.bean.LoginBean;
-import com.programmers.io.bean.OptionBean;
-import com.programmers.io.bean.QuestionBean;
-import com.programmers.io.bean.QuestionCategoryBean;
-import com.programmers.io.bean.SectionBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
-import com.programmers.io.common.CustomException;
 import com.programmers.io.entities.Exam;
-import com.programmers.io.entities.ExamDetail;
-import com.programmers.io.entities.Options;
-import com.programmers.io.entities.Question;
-import com.programmers.io.entities.QuestionCategory;
-import com.programmers.io.entities.Section;
 import com.programmers.io.entities.User;
 import com.programmers.io.repository.ExamDetailRepository;
 import com.programmers.io.repository.ExamRepository;
@@ -51,17 +36,17 @@ public class LoginServiceImpl implements LoginService {
 	public Map<String, String> login(LoginBean loginBean) throws Exception {
 
 		Map<String, String> ClaimsMap = new HashMap<String, String>();
-		
+
 		// Exam
 		String password = loginBean.getPassword();
-		Exam exam = examRepository.findByPassword(password );
+		Exam exam = examRepository.findByPassword(password);
 		ClaimsMap.put("ExamId", String.valueOf(exam.getId()));
 
 		// user
 		String emailId = loginBean.getEmailId();
-		User user = userRepository.findByEmailIdIgnoreCase(emailId );
+		User user = userRepository.findByEmailIdIgnoreCase(emailId);
 		ClaimsMap.put("UserId", String.valueOf(user.getId()));
-		
+
 		return ClaimsMap;
 	}
 
@@ -72,18 +57,16 @@ public class LoginServiceImpl implements LoginService {
 		if (exam == null) {
 			status.setCode(Constant.BAD_REQUEST_CODE);
 			status.setMessage(Constant.INCORRECT_PASSWORD_MESSAGE);
-		}
-		else if(exam.getTimestamp()!= null){
+		} else if (exam.getTimestamp() != null) {
 			Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
 			Date currentDate = new Date();
-			System.out.println("currentDate "+currentDate.toString());
-			System.out.println("validDate"+validDate.toString());
-			if(currentDate.before(validDate)){
+			System.out.println("currentDate " + currentDate.toString());
+			System.out.println("validDate" + validDate.toString());
+			if (currentDate.after(validDate)) {
 				status.setCode(Constant.BAD_REQUEST_CODE);
 				status.setMessage(Constant.EXAM_EXPIRED_MESSAGE);
 			}
 		}
-		
 
 		User user = userRepository.findByEmailIdIgnoreCase(emailId);
 		if (user == null) {
@@ -93,12 +76,12 @@ public class LoginServiceImpl implements LoginService {
 
 		return status;
 	}
-	
+
 	public Date addHoursToJavaUtilDate(Date date, int hours) {
-	    Calendar calendar = Calendar.getInstance();
-	    calendar.setTime(date);
-	    calendar.add(Calendar.HOUR_OF_DAY, hours);
-	    return calendar.getTime();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.HOUR_OF_DAY, hours);
+		return calendar.getTime();
 	}
 
 }

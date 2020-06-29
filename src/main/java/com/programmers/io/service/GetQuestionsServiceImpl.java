@@ -1,23 +1,17 @@
 package com.programmers.io.service;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
-import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.programmers.io.OnlineTestPortalApplication;
 import com.programmers.io.bean.ExamBean;
-import com.programmers.io.bean.LoginBean;
 import com.programmers.io.bean.OptionBean;
 import com.programmers.io.bean.QuestionBean;
 import com.programmers.io.bean.QuestionCategoryBean;
@@ -59,13 +53,13 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 	public JwtTokenUtil jwtTokenUtil;  
 	
 	@Override
-	public ExamBean getQuestions(ExamBean examBean, String examId, String userId) throws Exception {
-		examBean = getExamBean(examBean, examId, userId);
+	public ExamBean getQuestions(String examId, String userId) throws Exception {
+		ExamBean examBean = getExamBean(examId, userId);
 		return examBean;
 	}
 
-	private ExamBean getExamBean(ExamBean examBean, String examId, String userId) throws Exception {
-		
+	private ExamBean getExamBean(String examId, String userId) throws Exception {
+		ExamBean examBean = new ExamBean();
 		// Exam
 		Exam exam = examRepository.findById(Long.parseLong(examId)).get();
 		examBean.setExamName(exam.getExamName());
@@ -155,47 +149,7 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 
 	}
 
-	@Override
-	public StatusBean validateExamBean(ExamBean examBean) throws Exception {
-		StatusBean status = new StatusBean(Constant.SUCCESS_CODE, "Valid Request");
-//		String examName = examBean.getExamName();
-//		String userName = examBean.getUserName();
-		List<QuestionCategoryBean> questionCategories = examBean.getQuestionCategories();
-		StatusBean examBeanStatus = examBean.getStatus();
-		
-		boolean isBadRequest = false;
-//		if(examName!=null){
-//			isBadRequest = true;
-//		}
-//		else if(userName != null){
-//			isBadRequest = true;
-//		}
-//		else 
-		if(questionCategories != null){
-			isBadRequest = true;
-		}
-		else if(examBeanStatus != null){
-			isBadRequest = true;
-		}
-		
-//		Optional<Exam> optinalExam = examRepository.findById(Long.parseLong(examId));
-//		Optional<User> optionalUser = userRepository.findById(Long.parseLong(userId));
-		
-		if(isBadRequest == true){
-			status.setCode(Constant.BAD_REQUEST_CODE);
-			status.setMessage(Constant.BAD_REQUEST_MESSAGE);
-		}		
-//		else if (!optinalExam.isPresent()) {
-//			status.setCode(Constant.BAD_REQUEST_CODE);
-//			status.setMessage(Constant.EXAM_NOTFOUND_MESSAGE + examId);
-//		}			
-//		else if (!optionalUser.isPresent()) {
-//			status.setCode(Constant.BAD_REQUEST_CODE);
-//			status.setMessage(Constant.USER_NOTFOUND_MESSAGE + userId);
-//		}
-		
-		return status;
-	}
+
 
 	private void fetchClaimsFromToken() {
 		// TODO Auto-generated method stub

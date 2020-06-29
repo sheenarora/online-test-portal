@@ -1,8 +1,6 @@
 package com.programmers.io.entities;
 
-import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -15,13 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

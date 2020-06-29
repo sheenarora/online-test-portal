@@ -1,7 +1,6 @@
 package com.programmers.io.entities;
 
 import java.util.Date;
-import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,18 +15,20 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Getter @Setter @NoArgsConstructor
+@Getter
+@Setter
+@NoArgsConstructor
 public class Section {
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
-	
-	@Column(unique=true)
+
+	@Column(unique = true)
 	private int marksPerQuestion;
-	
+
 	private Boolean isActive;
-	
+
 	@UpdateTimestamp
 	public Date timestamp;
 

@@ -1,15 +1,10 @@
 package com.programmers.io.service;
 
-import java.util.Set;
-
-import javax.persistence.Transient;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
-import com.programmers.io.entities.Exam;
 import com.programmers.io.entities.User;
 import com.programmers.io.repository.UserRepository;
 
@@ -20,18 +15,18 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepository;
 
 	@Override
-	public Boolean save(User user) throws Exception{
+	public Boolean save(User user) throws Exception {
 		Boolean userExist = false;
 		User userCheck = userRepository.findByEmailIdIgnoreCase(user.getEmailId());
 		if (userCheck == null) {
 			userRepository.save(user);
 			userExist = true;
-		} 
+		}
 		return userExist;
 	}
 
 	@Override
-	public StatusBean validateUser(User user) throws Exception{
+	public StatusBean validateUser(User user) throws Exception {
 		StatusBean status = new StatusBean(Constant.SUCCESS_CODE, "Valid Request");
 		String emailId = user.getEmailId();
 		String firstName = user.getFirstName();
@@ -48,79 +43,79 @@ public class UserServiceImpl implements UserService {
 		String state = user.getState();
 		String city = user.getCity();
 		double graduationPercentage = user.getGraduationPercentage();
-		
+
 		boolean isBadRequest = false;
 
-		//firtsname
-		if(firstName==null||firstName.equalsIgnoreCase("")){
+		// firtsname
+		if (firstName == null || firstName.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//lastname
-		else if(lastName==null||lastName.equalsIgnoreCase("")){
+		// lastname
+		else if (lastName == null || lastName.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//gender
-		else if(gender==null||gender.equalsIgnoreCase("")){
+		// gender
+		else if (gender == null || gender.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//age
-		else if(age==0){
-			isBadRequest = true;
-		}		
-		//college
-		else if(college==null||college.equalsIgnoreCase("")){
-			isBadRequest = true;		
-		}
-		//skills
-		else if(skills==null||skills.equalsIgnoreCase("")){
+		// age
+		else if (age == 0) {
 			isBadRequest = true;
 		}
-		//degree
-		else if(degree==null||degree.equalsIgnoreCase("")){
+		// college
+		else if (college == null || college.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//graduation year
-		else if(graduationYear==0){
+		// skills
+		else if (skills == null || skills.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//mobile number
-		else if(mobileNumber==null||mobileNumber.equalsIgnoreCase("")){
+		// degree
+		else if (degree == null || degree.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//Country
-		else if(country==null||country.equalsIgnoreCase("")){
+		// graduation year
+		else if (graduationYear == 0) {
 			isBadRequest = true;
 		}
-		//State
-		else if(state==null||state.equalsIgnoreCase("")){
+		// mobile number
+		else if (mobileNumber == null || mobileNumber.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//City
-		else if(city==null||city.equalsIgnoreCase("")){
+		// Country
+		else if (country == null || country.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//Graduation percentage
-		else if(graduationPercentage==0){
+		// State
+		else if (state == null || state.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		//email
-		else if(emailId==null||emailId.equalsIgnoreCase("")){
+		// City
+		else if (city == null || city.equalsIgnoreCase("")) {
 			isBadRequest = true;
 		}
-		
-		//if isBadRequest is true then bad request otherwise check for duplicacy of email
-		if(isBadRequest == true){
+		// Graduation percentage
+		else if (graduationPercentage == 0) {
+			isBadRequest = true;
+		}
+		// email
+		else if (emailId == null || emailId.equalsIgnoreCase("")) {
+			isBadRequest = true;
+		}
+
+		// if isBadRequest is true then bad request otherwise check for
+		// duplicacy of email
+		if (isBadRequest == true) {
 			status.setCode(Constant.BAD_REQUEST_CODE);
 			status.setMessage(Constant.BAD_REQUEST_MESSAGE + "Except middlename, all the fields are mandatory.");
-		}
-		else{
+		} else {
 			User userExist = userRepository.findByEmailIdIgnoreCase(emailId);
 			if (userExist != null) {
 				status.setCode(Constant.BAD_REQUEST_CODE);
 				status.setMessage(Constant.DUPLICATE_EMAIL_MESSAGE);
 			}
-		}		
-				
+		}
+
 		return status;
 	}
 }

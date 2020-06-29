@@ -1,7 +1,5 @@
 package com.programmers.io.controller;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -15,13 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.io.bean.ExamBean;
-import com.programmers.io.bean.QuestionCategoryBean;
 import com.programmers.io.bean.ResultBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.AppUtils;
 import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;
-import com.programmers.io.entities.Result;
 import com.programmers.io.service.LoginService;
 import com.programmers.io.service.ResultService;
 

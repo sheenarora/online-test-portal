@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.programmers.io.OnlineTestPortalApplication;
-import com.programmers.io.bean.ExamBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;

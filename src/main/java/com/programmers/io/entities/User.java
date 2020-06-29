@@ -1,7 +1,6 @@
 package com.programmers.io.entities;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Entity;
@@ -11,8 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.util.CollectionUtils;
-import org.springframework.util.StringUtils;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
