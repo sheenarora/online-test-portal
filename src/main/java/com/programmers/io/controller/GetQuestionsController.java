@@ -43,15 +43,12 @@ public class GetQuestionsController {
 			Claims claims = AppUtils.fetchClaimsFromToken(request);
 			String examId = (String) claims.get("ExamId");
 			String userId = (String) claims.get("UserId");
-			if (status.getCode() == 200) {
 
-				examBean = getQuestionsService.getQuestions(examId, userId);
-				status.setCode(Constant.SUCCESS_CODE);
-				status.setMessage(Constant.SUCCESS_MESSAGE);
-				examBean.setStatus(status);
-			} else {
-				examBean.setStatus(status);
-			}
+			examBean = getQuestionsService.getQuestions(examId, userId);
+			status.setCode(Constant.SUCCESS_CODE);
+			status.setMessage(Constant.SUCCESS_MESSAGE);
+			examBean.setStatus(status);
+
 		} catch (CustomException e) {
 			status.setCode(Constant.CUSTOM_ERROR_CODE);
 			status.setMessage(e.getMessage());
@@ -61,7 +58,7 @@ public class GetQuestionsController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			status.setCode(Constant.INTERNAL_SERVER_ERROR_CODE);
-			status.setMessage(Constant.INTERNAL_SERVER_ERROR_MESSAGE);
+			status.setMessage(e.getMessage());
 			examBean = new ExamBean();
 			examBean.setStatus(status);
 			LOGGER.error(e.getMessage());

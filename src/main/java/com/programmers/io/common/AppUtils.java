@@ -21,6 +21,7 @@ public class AppUtils {
 		 * programmers.io word and get only the Token
 		 */
 		String jwtToken = requestTokenHeader.substring(15);
+		jwtTokenUtil = new JwtTokenUtil();
 		
 		Claims claims = jwtTokenUtil.getAllClaimsFromToken(jwtToken);
 		
