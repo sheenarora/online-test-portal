@@ -1,5 +1,6 @@
 package com.programmers.io.service;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -126,7 +127,7 @@ public class ResultServiceImpl implements ResultService {
 	}
 
 	@Override
-	public ResultBean calculateResult(ExamBean examBean, String examId, String userId) throws Exception {
+	public List calculateResult(ExamBean examBean, String examId, String userId) throws Exception {
 		Set<ResultDetail> resultByCategorySet = new HashSet<ResultDetail>();
 
 		Result result = new Result();
@@ -138,13 +139,14 @@ public class ResultServiceImpl implements ResultService {
 
 		result = saveResult(result);
 
-		ResultBean resultResponse = new ResultBean();
+		List<ResultBean> resultResponseList = new ArrayList<ResultBean>();
 		int totalMarksPerCategory = 0;
 		int obtainedMarksPerCategory = 0;
 
 		List<QuestionCategoryBean> questionCategoryBeans = examBean.getQuestionCategories();
 		for (QuestionCategoryBean questionCategoryBean : questionCategoryBeans) {
 			List<SectionBean> sectionBeans = questionCategoryBean.getSections();
+			ResultBean resultResponse = new ResultBean();
 			resultResponse.setQuestionCategory(questionCategoryBean.getText());
 			for (SectionBean sectionBean : sectionBeans) {
 				long ExamDetailId = Long.parseLong(sectionBean.getExamDetailId());
@@ -166,7 +168,7 @@ public class ResultServiceImpl implements ResultService {
 						try {
 							answerId = Long.parseLong(questionBean.getAnswer());
 						} catch (Exception e) {
-							throw new CustomException("Answer should always be numeric ");
+							throw new CustomException("Answer should always be numeric (id of correct option)");
 						}
 						if (optionsRepository.findById(answerId).isPresent() && questionBean.getId() != null) {
 							if (optionsRepository.findById(answerId).get().getAnswer()) {
@@ -187,12 +189,13 @@ public class ResultServiceImpl implements ResultService {
 
 			resultResponse.setObtainedMarks(obtainedMarksPerCategory);
 			resultResponse.setTotalMarks(totalMarksPerCategory);
+			resultResponseList.add(resultResponse);
 
 		}
 		result.setResultDetailSet(resultByCategorySet);
 		result = saveResult(result);
 
-		return resultResponse;
+		return resultResponseList;
 	}
 
 }

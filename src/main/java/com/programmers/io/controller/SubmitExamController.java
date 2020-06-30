@@ -1,5 +1,8 @@
 package com.programmers.io.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,6 +46,7 @@ public class SubmitExamController {
 
 		StatusBean status = new StatusBean();
 		ResultBean resultBean = new ResultBean();
+		List<ResultBean> resultResponseList = new ArrayList<ResultBean>();
 		
 		try{
 			Claims claims = AppUtils.fetchClaimsFromToken(request);
@@ -50,7 +54,8 @@ public class SubmitExamController {
 			String userId = (String) claims.get("UserId");
 			status = resultService.validateSubmitRequest(examBean, examId, userId);
 			if (status.getCode() == 200) {
-				resultBean = resultService.calculateResult(examBean, examId, userId);
+				resultResponseList = resultService.calculateResult(examBean, examId, userId);
+				resultBean.setResultResponseList(resultResponseList);
 				status = new StatusBean(Constant.SUCCESS_CODE, Constant.SUCCESS_MESSAGE);
 			}
 		}catch (CustomException e) {
