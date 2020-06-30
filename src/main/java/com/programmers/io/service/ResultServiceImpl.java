@@ -141,11 +141,11 @@ public class ResultServiceImpl implements ResultService {
 		result = saveResult(result);
 
 		List<ResultPerCategoryBean> resultResponseList = new ArrayList<ResultPerCategoryBean>();
-		int totalMarksPerCategory = 0;
-		int obtainedMarksPerCategory = 0;
 
 		List<QuestionCategoryBean> questionCategoryBeans = examBean.getQuestionCategories();
 		for (QuestionCategoryBean questionCategoryBean : questionCategoryBeans) {
+			int totalMarksPerCategory = 0;
+			int obtainedMarksPerCategory = 0;
 			List<SectionBean> sectionBeans = questionCategoryBean.getSections();
 			ResultPerCategoryBean resultResponse = new ResultPerCategoryBean();
 			resultResponse.setQuestionCategory(questionCategoryBean.getText());
