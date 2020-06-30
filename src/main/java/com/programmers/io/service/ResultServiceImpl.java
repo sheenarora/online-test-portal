@@ -12,6 +12,7 @@ import com.programmers.io.bean.ExamBean;
 import com.programmers.io.bean.QuestionBean;
 import com.programmers.io.bean.QuestionCategoryBean;
 import com.programmers.io.bean.ResultBean;
+import com.programmers.io.bean.ResultPerCategoryBean;
 import com.programmers.io.bean.SectionBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
@@ -139,14 +140,14 @@ public class ResultServiceImpl implements ResultService {
 
 		result = saveResult(result);
 
-		List<ResultBean> resultResponseList = new ArrayList<ResultBean>();
+		List<ResultPerCategoryBean> resultResponseList = new ArrayList<ResultPerCategoryBean>();
 		int totalMarksPerCategory = 0;
 		int obtainedMarksPerCategory = 0;
 
 		List<QuestionCategoryBean> questionCategoryBeans = examBean.getQuestionCategories();
 		for (QuestionCategoryBean questionCategoryBean : questionCategoryBeans) {
 			List<SectionBean> sectionBeans = questionCategoryBean.getSections();
-			ResultBean resultResponse = new ResultBean();
+			ResultPerCategoryBean resultResponse = new ResultPerCategoryBean();
 			resultResponse.setQuestionCategory(questionCategoryBean.getText());
 			for (SectionBean sectionBean : sectionBeans) {
 				long ExamDetailId = Long.parseLong(sectionBean.getExamDetailId());
