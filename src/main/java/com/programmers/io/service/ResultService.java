@@ -3,7 +3,6 @@ package com.programmers.io.service;
 import java.util.List;
 
 import com.programmers.io.bean.ExamBean;
-import com.programmers.io.bean.ResultBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.entities.Result;
 

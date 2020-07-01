@@ -15,6 +15,4 @@ public class ResultPerCategoryBean {
 	
 	private int totalMarks;
 	
-	private StatusBean status;
-
 }

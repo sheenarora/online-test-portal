@@ -16,8 +16,6 @@ import com.programmers.io.bean.OptionBean;
 import com.programmers.io.bean.QuestionBean;
 import com.programmers.io.bean.QuestionCategoryBean;
 import com.programmers.io.bean.SectionBean;
-import com.programmers.io.bean.StatusBean;
-import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;
 import com.programmers.io.entities.Exam;
 import com.programmers.io.entities.ExamDetail;
@@ -34,7 +32,7 @@ import com.programmers.io.securityConfig.JwtTokenUtil;
 
 @Service
 public class GetQuestionsServiceImpl implements GetQuestionsService {
-	
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetQuestionsServiceImpl.class);
 
 	@Autowired
@@ -48,10 +46,10 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 
 	@Autowired
 	public QuestionRepository questionRepository;
-	
+
 	@Autowired
-	public JwtTokenUtil jwtTokenUtil;  
-	
+	public JwtTokenUtil jwtTokenUtil;
+
 	@Override
 	public ExamBean getQuestions(String examId, String userId) throws Exception {
 		ExamBean examBean = getExamBean(examId, userId);
@@ -73,7 +71,7 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 		Set<ExamDetail> examDetailList = exam.getExamDetailList();
 
 		Map<Long, QuestionCategoryBean> QuestionCategoryMap = new HashMap<Long, QuestionCategoryBean>(0);
-		
+
 		for (ExamDetail examDetail : examDetailList) {
 			QuestionCategory questionCategory = examDetail.getQuestionCategory();
 			Long questionCategoryId = questionCategory.getId();
@@ -84,10 +82,11 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 			// get quetions for section and QuetionCategory
 			List<Question> questions = questionRepository.findRandomQuestions(questionCategoryId, sectionId,
 					QuestionLimit);
-			if(questions.size()!=QuestionLimit){
-				throw new CustomException("Insert more Questions of "+ section.getMarksPerQuestion() +" marks in Database for Question Category-" +questionCategory.getQuestionCategoryName());
+			if (questions.size() != QuestionLimit) {
+				throw new CustomException("Insert more Questions of " + section.getMarksPerQuestion()
+						+ " marks in Database for Question Category-" + questionCategory.getQuestionCategoryName());
 			}
-			
+
 			List<QuestionBean> questionBeanList = new ArrayList();
 			int j = 0;
 			for (Question question : questions) {
@@ -110,11 +109,10 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 				questionBeanList.add(Qb);
 				j++;
 			}
-			
 
 			// sectionBean
 			SectionBean sb = new SectionBean();
-			//sb.setId(String.valueOf(sectionId));
+			// sb.setId(String.valueOf(sectionId));
 			sb.setExamDetailId(String.valueOf(examDetail.getId()));
 			sb.setMarksPerQuestion(String.valueOf(section.getMarksPerQuestion()));
 			sb.setNoOfQuestions(String.valueOf(QuestionLimit));
@@ -122,25 +120,23 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 
 			QuestionCategoryBean Qcb = null;
 
-			// If QuestionCategoryBean exist already then fetch that otherwise create one
+			// If QuestionCategoryBean exist already then fetch that otherwise
+			// create one
 			if (QuestionCategoryMap.get(questionCategoryId) != null) {
-					Qcb = QuestionCategoryMap.get(questionCategoryId);
-					Qcb.getSections().add(sb);
-			}
-			else{
-				Qcb= new QuestionCategoryBean();
+				Qcb = QuestionCategoryMap.get(questionCategoryId);
+				Qcb.getSections().add(sb);
+			} else {
+				Qcb = new QuestionCategoryBean();
 				List<SectionBean> sbList = new ArrayList();
 				sbList.add(sb);
 				Qcb.setSections(sbList);
-				//Qcb.setId(String.valueOf(questionCategoryId));
+				// Qcb.setId(String.valueOf(questionCategoryId));
 				Qcb.setText(questionCategory.getQuestionCategoryName());
 				QuestionCategoryMap.put(questionCategoryId, Qcb);
 			}
-			
-		
 
 		}
-		
+
 		//
 		List<QuestionCategoryBean> QuestionCategoryList = new ArrayList(QuestionCategoryMap.values());
 		examBean.setQuestionCategories(QuestionCategoryList);
@@ -149,11 +145,9 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 
 	}
 
-
-
 	private void fetchClaimsFromToken() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

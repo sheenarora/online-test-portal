@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 import com.programmers.io.bean.ExamBean;
 import com.programmers.io.bean.QuestionBean;
 import com.programmers.io.bean.QuestionCategoryBean;
-import com.programmers.io.bean.ResultBean;
 import com.programmers.io.bean.ResultPerCategoryBean;
 import com.programmers.io.bean.SectionBean;
 import com.programmers.io.bean.StatusBean;
