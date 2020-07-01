@@ -57,7 +57,7 @@ public class LoginServiceImpl implements LoginService {
 		if (exam == null) {
 			status.setCode(Constant.BAD_REQUEST_CODE);
 			status.setMessage(Constant.INCORRECT_PASSWORD_MESSAGE);
-		} else if (exam.getTimestamp() != null) {
+		} else if (exam.getTimestamp() != null && exam.getExpiryHours()!= 0) {
 			Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
 			Date currentDate = new Date();
 			System.out.println("currentDate " + currentDate.toString());

@@ -61,6 +61,7 @@ public class GetQuestionsServiceImpl implements GetQuestionsService {
 		// Exam
 		Exam exam = examRepository.findById(Long.parseLong(examId)).get();
 		examBean.setExamName(exam.getExamName());
+		examBean.setExamDuration(String.valueOf(exam.getExamDuration()));
 
 		// user
 		User user = userRepository.findById(Long.parseLong(userId)).get();

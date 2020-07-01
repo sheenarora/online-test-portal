@@ -11,11 +11,9 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor
 public class ExamBean {
 
-	//private String examId;
-
 	private String examName;
 	
-	//private String userId;
+	private String examDuration;
 
 	private String userName;
 	
