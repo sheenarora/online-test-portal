@@ -43,7 +43,7 @@ public class Exam {
 	
 	private int expiryHours;
 	
-	private float examDuration;
+	private int examDuration;
 	
 	@UpdateTimestamp
 	public Date timestamp;

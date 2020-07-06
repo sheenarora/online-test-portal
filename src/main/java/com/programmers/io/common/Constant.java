@@ -26,5 +26,6 @@ public class Constant {
 	public static final String EXAM_EXPIRED_MESSAGE = "Exam has Expired.";
 	public static final String USER_NOTFOUND_MESSAGE = "User not found with ID : ";
 	public static final String EXAM_NOTFOUND_MESSAGE = "Exam not found with ID : ";
+	public static final String USER_ALREADY_TAKEN_EXAM = "User has already taken the exam.";
 	
 }	

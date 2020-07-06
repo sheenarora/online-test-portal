@@ -16,6 +16,7 @@ import com.programmers.io.entities.User;
 import com.programmers.io.repository.ExamDetailRepository;
 import com.programmers.io.repository.ExamRepository;
 import com.programmers.io.repository.QuestionRepository;
+import com.programmers.io.repository.ResultRepository;
 import com.programmers.io.repository.UserRepository;
 
 @Service
@@ -32,6 +33,9 @@ public class LoginServiceImpl implements LoginService {
 
 	@Autowired
 	public QuestionRepository questionRepository;
+	
+	@Autowired
+	public ResultRepository resultRepository;
 
 	public Map<String, String> login(LoginBean loginBean) throws Exception {
 
@@ -67,11 +71,17 @@ public class LoginServiceImpl implements LoginService {
 				status.setMessage(Constant.EXAM_EXPIRED_MESSAGE);
 			}
 		}
+				
 
 		User user = userRepository.findByEmailIdIgnoreCase(emailId);
 		if (user == null) {
 			status.setCode(Constant.BAD_REQUEST_CODE);
 			status.setMessage(Constant.INVALID_USER_ID_MESSAGE);
+		}
+		
+		if(resultRepository.findByUserIdAndExamId(user.getId(), exam.getId()).isPresent()){
+			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setMessage(Constant.USER_ALREADY_TAKEN_EXAM);
 		}
 
 		return status;
