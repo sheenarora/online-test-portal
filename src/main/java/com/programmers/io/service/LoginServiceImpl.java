@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.programmers.io.bean.LoginBean;
@@ -55,11 +56,11 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	public StatusBean validateloginBean(String emailId, String password) throws Exception {
-		StatusBean status = new StatusBean(Constant.SUCCESS_CODE, "Valid Request");
+		StatusBean status = new StatusBean(HttpStatus.OK, "Valid Request");
 
 		Exam exam = examRepository.findByPassword(password);
 		if (exam == null) {
-			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.INCORRECT_PASSWORD_MESSAGE);
 		} else if (exam.getTimestamp() != null && exam.getExpiryHours()!= 0) {
 			Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
@@ -67,7 +68,7 @@ public class LoginServiceImpl implements LoginService {
 			System.out.println("currentDate " + currentDate.toString());
 			System.out.println("validDate" + validDate.toString());
 			if (currentDate.after(validDate)) {
-				status.setCode(Constant.BAD_REQUEST_CODE);
+				status.setCode(HttpStatus.BAD_REQUEST);
 				status.setMessage(Constant.EXAM_EXPIRED_MESSAGE);
 			}
 		}
@@ -75,12 +76,12 @@ public class LoginServiceImpl implements LoginService {
 
 		User user = userRepository.findByEmailIdIgnoreCase(emailId);
 		if (user == null) {
-			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.INVALID_USER_ID_MESSAGE);
 		}
 		
 		if(resultRepository.findByUserIdAndExamId(user.getId(), exam.getId()).isPresent()){
-			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.USER_ALREADY_TAKEN_EXAM);
 		}
 

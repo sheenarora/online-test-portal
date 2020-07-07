@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.programmers.io.bean.ExamBean;
@@ -70,7 +71,7 @@ public class ResultServiceImpl implements ResultService {
 
 	@Override
 	public StatusBean validateSubmitRequest(ExamBean examBean, String examId, String userId) throws Exception {
-		StatusBean status = new StatusBean(Constant.SUCCESS_CODE, "Valid Request");
+		StatusBean status = new StatusBean(HttpStatus.OK, "Valid Request");
 		List<QuestionCategoryBean> questionCategoryBeans = examBean.getQuestionCategories();
 
 		Exam exam = examRepository.findById(Long.parseLong(examId)).get();
@@ -119,7 +120,7 @@ public class ResultServiceImpl implements ResultService {
 		}
 
 		if (error == true) {
-			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(message);
 		}
 

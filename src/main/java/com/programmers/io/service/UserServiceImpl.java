@@ -1,6 +1,7 @@
 package com.programmers.io.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.programmers.io.bean.StatusBean;
@@ -27,7 +28,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public StatusBean validateUser(User user) throws Exception {
-		StatusBean status = new StatusBean(Constant.SUCCESS_CODE, "Valid Request");
+		StatusBean status = new StatusBean(HttpStatus.OK, "Valid Request");
 		String emailId = user.getEmailId();
 		String firstName = user.getFirstName();
 		String middleName = user.getMiddleName();
@@ -106,12 +107,12 @@ public class UserServiceImpl implements UserService {
 		// if isBadRequest is true then bad request otherwise check for
 		// duplicacy of email
 		if (isBadRequest == true) {
-			status.setCode(Constant.BAD_REQUEST_CODE);
+			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.BAD_REQUEST_MESSAGE + "Except middlename, all the fields are mandatory.");
 		} else {
 			User userExist = userRepository.findByEmailIdIgnoreCase(emailId);
 			if (userExist != null) {
-				status.setCode(Constant.BAD_REQUEST_CODE);
+				status.setCode(HttpStatus.BAD_REQUEST);
 				status.setMessage(Constant.DUPLICATE_EMAIL_MESSAGE);
 			}
 		}
