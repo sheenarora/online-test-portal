@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,36 +43,41 @@ public class SubmitExamController {
 
 	@PostMapping
 	@CrossOrigin(origins = "*")
-	public ResultBean submitExam(@RequestBody ExamBean examBean, HttpServletRequest request, HttpServletResponse response) {
+	public ResponseEntity<Object> submitExam(@RequestBody ExamBean examBean, HttpServletRequest request, HttpServletResponse response) {
 		LOGGER.info("API call: /submit for user and exam :" + examBean.getUserName() +" and "+ examBean.getExamName());
 
 		StatusBean status = new StatusBean();
 		ResultBean resultBean = new ResultBean();
 		List<ResultBean> resultResponseList = new ArrayList<ResultBean>();
+		ResponseEntity<Object> responseEntity = null;
 		
 		try{
 			Claims claims = AppUtils.fetchClaimsFromToken(request);
 			String examId = (String) claims.get("ExamId");
 			String userId = (String) claims.get("UserId");
 			status = resultService.validateSubmitRequest(examBean, examId, userId);
-			if (status.getCode() == 200) {
+			if (status.getCode() == HttpStatus.OK) {
 				resultResponseList = resultService.calculateResult(examBean, examId, userId);
 				resultBean.setResultResponseList(resultResponseList);
-				status = new StatusBean(Constant.SUCCESS_CODE, Constant.SUCCESS_MESSAGE);
+				status = new StatusBean(HttpStatus.OK, Constant.SUCCESS_MESSAGE);
+				
 			}
 		}catch (CustomException e) {
 			e.printStackTrace();
-			status.setCode(Constant.INTERNAL_SERVER_ERROR_CODE);
+			status.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
 			status.setMessage(e.getMessage());
+			
 			LOGGER.error(e.getMessage());
 		}catch (Exception e) {
 			e.printStackTrace();
-			status.setCode(Constant.INTERNAL_SERVER_ERROR_CODE);
+			status.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
 			status.setMessage(e.getMessage());
+		
 			LOGGER.error(e.getMessage());
 		}
 		resultBean.setStatus(status);
-		return resultBean;
+		responseEntity = new ResponseEntity<>(resultBean, status.getCode());
+		return responseEntity;
 	}
 
 }

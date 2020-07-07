@@ -5,6 +5,7 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,10 +35,11 @@ public class LoginController {
 
 	@PostMapping
 	@CrossOrigin(origins = "*")
-	public ResponseEntity<?> login(@RequestBody LoginBean loginBean) {
+	public ResponseEntity<Object> login(@RequestBody LoginBean loginBean) {
 		LOGGER.info("API call: /login for request :" + loginBean);
 
 		StatusBean status = new StatusBean();
+		ResponseEntity<Object> responseEntity = null;
 		System.out.println("Login : " + loginBean);
 
 		String emailId = loginBean.getEmailId();
@@ -45,25 +47,27 @@ public class LoginController {
 
 		try {
 			status = loginService.validateloginBean(emailId, password);
-			if (status.getCode() == Constant.SUCCESS_CODE) {
+			if (status.getCode() == HttpStatus.OK) {
 				Map<String, String> ClaimsMap = loginService.login(loginBean);
 				String examId = ClaimsMap.get("ExamId");
 				String userId = ClaimsMap.get("UserId");
 
 				final String token = jwtTokenUtil.generateToken(emailId, userId, examId);
 				status.setMessage(token);
+				
 			}
 		} catch (CustomException e) {
-			status.setCode(Constant.CUSTOM_ERROR_CODE);
+			status.setCode(HttpStatus.FORBIDDEN);
 			status.setMessage(e.getMessage());
 			LOGGER.error(e.getMessage());
 		} catch (Exception e) {
 			e.printStackTrace();
-			status.setCode(Constant.INTERNAL_SERVER_ERROR_CODE);
+			status.setCode(HttpStatus.INTERNAL_SERVER_ERROR);
 			status.setMessage(e.getMessage());
 			LOGGER.error(e.getMessage());
 		}
-		return ResponseEntity.ok(status);
+		responseEntity = new ResponseEntity<>(status, status.getCode());
+		return responseEntity;
 	}
 
 }
