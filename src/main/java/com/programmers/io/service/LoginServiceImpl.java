@@ -1,5 +1,6 @@
 package com.programmers.io.service;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -62,9 +63,17 @@ public class LoginServiceImpl implements LoginService {
 		if (exam == null) {
 			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.INCORRECT_PASSWORD_MESSAGE);
-		} else if (exam.getTimestamp() != null && exam.getExpiryHours()!= 0) {
-			Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
-			Date currentDate = new Date();
+		} else if (exam.getTimestamp() != null && exam.getDate2() !=null && exam.getTime2()!=null) {
+		//Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
+			
+			String format = "MM/dd/yyyy hh:mm a";
+			
+			SimpleDateFormat sdf = new SimpleDateFormat(format);
+			Date validDate = sdf.parse(exam.getDate2() + " " + exam.getTime2());
+			
+			String str = sdf.format(new Date());
+			Date currentDate = sdf.parse(str);
+			
 			System.out.println("currentDate " + currentDate.toString());
 			System.out.println("validDate" + validDate.toString());
 			if (currentDate.after(validDate)) {

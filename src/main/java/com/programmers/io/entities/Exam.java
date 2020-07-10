@@ -34,6 +34,8 @@ public class Exam {
 	@Column(unique=true)
 	private String password;
 	
+	private int examDuration;
+	
 	@ManyToOne
 	private ExamCategory examCategory;
 	
@@ -41,9 +43,13 @@ public class Exam {
 	@JoinColumn(name = "exam_id")
 	private Set<ExamDetail> examDetailList;
 	
-	private int expiryHours;
+	private String date1;
 	
-	private int examDuration;
+	private String time1;
+	
+	private String date2;
+	
+	private String time2;
 	
 	@UpdateTimestamp
 	public Date timestamp;

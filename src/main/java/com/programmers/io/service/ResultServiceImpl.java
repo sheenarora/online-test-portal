@@ -143,9 +143,12 @@ public class ResultServiceImpl implements ResultService {
 		List<ResultPerCategoryBean> resultResponseList = new ArrayList<ResultPerCategoryBean>();
 
 		List<QuestionCategoryBean> questionCategoryBeans = examBean.getQuestionCategories();
+		int totalExamMarks = 0;
+		int totalObtainedMarks = 0;
 		for (QuestionCategoryBean questionCategoryBean : questionCategoryBeans) {
 			int totalMarksPerCategory = 0;
 			int obtainedMarksPerCategory = 0;
+			
 			List<SectionBean> sectionBeans = questionCategoryBean.getSections();
 			ResultPerCategoryBean resultResponse = new ResultPerCategoryBean();
 			resultResponse.setQuestionCategory(questionCategoryBean.getText());
@@ -160,6 +163,7 @@ public class ResultServiceImpl implements ResultService {
 				int obtainedMarks = 0;
 				int totalMarks = examDetail.getNumberOfQuestions() * section.getMarksPerQuestion();
 				totalMarksPerCategory = totalMarksPerCategory + totalMarks;
+				totalExamMarks = totalExamMarks + totalMarksPerCategory;
 				resultDetail.setTotalMarks(totalMarks);
 
 				List<QuestionBean> questionbeans = sectionBean.getQuestions();
@@ -181,6 +185,7 @@ public class ResultServiceImpl implements ResultService {
 				}
 
 				obtainedMarksPerCategory += obtainedMarks;
+				totalObtainedMarks += obtainedMarksPerCategory;
 
 				resultDetail.setObtainedMarks(obtainedMarks);
 				resultDetail = resultDetailRepository.save(resultDetail);
@@ -193,6 +198,8 @@ public class ResultServiceImpl implements ResultService {
 			resultResponseList.add(resultResponse);
 
 		}
+		result.setTotalMarks(totalExamMarks);
+		result.setObtainedMarks(totalObtainedMarks);
 		result.setResultDetailSet(resultByCategorySet);
 		result = saveResult(result);
 

@@ -25,6 +25,10 @@ public class Result {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	private int totalMarks;
+	
+	private int obtainedMarks;
 
 	@OneToOne(fetch = FetchType.EAGER)
 	private User user;
