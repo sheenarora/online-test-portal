@@ -31,7 +31,6 @@ public class UserServiceImpl implements UserService {
 		StatusBean status = new StatusBean(HttpStatus.OK, "Valid Request");
 		String emailId = user.getEmailId();
 		String firstName = user.getFirstName();
-		String middleName = user.getMiddleName();
 		String lastName = user.getLastName();
 		String gender = user.getGender();
 		int age = user.getAge();

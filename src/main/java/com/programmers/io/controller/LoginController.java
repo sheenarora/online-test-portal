@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.programmers.io.bean.LoginBean;
+import com.programmers.io.bean.LoginStatusBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;
@@ -38,7 +39,7 @@ public class LoginController {
 	public ResponseEntity<Object> login(@RequestBody LoginBean loginBean) {
 		LOGGER.info("API call: /login for request :" + loginBean);
 
-		StatusBean status = new StatusBean();
+		LoginStatusBean status = new LoginStatusBean();
 		ResponseEntity<Object> responseEntity = null;
 		System.out.println("Login : " + loginBean);
 
@@ -54,6 +55,7 @@ public class LoginController {
 
 				final String token = jwtTokenUtil.generateToken(emailId, userId, examId);
 				status.setMessage(token);
+				status.setId(Long.valueOf(userId));
 				
 			}
 		} catch (CustomException e) {

@@ -11,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.programmers.io.bean.LoginBean;
-import com.programmers.io.bean.StatusBean;
+import com.programmers.io.bean.LoginStatusBean;
 import com.programmers.io.common.Constant;
 import com.programmers.io.entities.Exam;
 import com.programmers.io.entities.User;
@@ -56,8 +56,8 @@ public class LoginServiceImpl implements LoginService {
 		return ClaimsMap;
 	}
 
-	public StatusBean validateloginBean(String emailId, String password) throws Exception {
-		StatusBean status = new StatusBean(HttpStatus.OK, "Valid Request");
+	public LoginStatusBean validateloginBean(String emailId, String password) throws Exception {
+		LoginStatusBean status = new LoginStatusBean(0,HttpStatus.OK, "Valid Request");
 
 		Exam exam = examRepository.findByPassword(password);
 		if (exam == null) {
@@ -66,10 +66,11 @@ public class LoginServiceImpl implements LoginService {
 		} else if (exam.getTimestamp() != null && exam.getDate2() !=null && exam.getTime2()!=null) {
 		//Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
 			
-			String format = "MM/dd/yyyy hh:mm a";
+			String format = "MM/dd/yyyy hh:mm:ss";
 			
 			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			Date validDate = sdf.parse(exam.getDate2() + " " + exam.getTime2());
+			
+			Date validDate = sdf.parse(exam.getDate2() + " " + exam.getTime2() + ":00");
 			
 			String str = sdf.format(new Date());
 			Date currentDate = sdf.parse(str);
