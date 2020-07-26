@@ -30,5 +30,6 @@ public class Constant {
 	public static final String EXAM_NOTFOUND_MESSAGE = "Exam not found with ID : ";
 	public static final String USER_ALREADY_TAKEN_EXAM = "User has already taken the exam.";
 	public static final String EXAM_NOT_STARTED = "Time remaining to start the exam";
+	public static final String NO_EXAM_TODAY = "No exam today";
 	
 }	

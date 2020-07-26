@@ -72,25 +72,30 @@ public class LoginServiceImpl implements LoginService {
 	        SimpleDateFormat formatter=new SimpleDateFormat(Constant.DATE_FORMAT);
 	        Date endDate=formatter.parse(validDate);
 	        Date startDate=formatter.parse(startDateString);
+	        Date currentDate = new Date();
+	        long diff = startDate.getTime() - currentDate.getTime();
+        	long diffSeconds = diff / 1000 % 60;
+            long diffMinutes = diff / (60 * 1000) % 60;
+            long diffHours = diff / (60 * 60 * 1000);
+            long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            Date currentDate = new Date();
-
-			if (currentDate.after(endDate)) {
+            if (currentDate.after(endDate)) {
 				status.setCode(HttpStatus.BAD_REQUEST);
 				status.setMessage(Constant.EXAM_EXPIRED_MESSAGE);
 			}
-			else if (startDate.after(currentDate)) {
-	        	long diff = startDate.getTime() - currentDate.getTime();
-	        	long diffSeconds = diff / 1000 % 60;
-	            long diffMinutes = diff / (60 * 1000) % 60;
-	            long diffHours = diff / (60 * 60 * 1000);
-	            
+			else if (startDate.after(currentDate) && diffDays<1) {
+				
+	            System.out.println(diffHours);
 	            String timeLeftString = diffHours + ":" + diffMinutes + ":" + diffSeconds;
-	            DateFormat timeFormat=new SimpleDateFormat("hh:mm:ss");
+	            DateFormat timeFormat=new SimpleDateFormat("HH:mm:ss");
 	            Date timeLeftDate = timeFormat.parse(timeLeftString);
 	            String timeLeft = timeFormat.format(timeLeftDate);
 	            status.setMessage(Constant.EXAM_NOT_STARTED);
 	            status.setTime(timeLeft);
+			}
+			else {
+				status.setCode(HttpStatus.BAD_REQUEST);
+				status.setMessage(Constant.NO_EXAM_TODAY);
 			}
 		}
 				
