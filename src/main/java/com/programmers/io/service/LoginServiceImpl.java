@@ -1,5 +1,6 @@
 package com.programmers.io.service;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -57,40 +58,48 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	public LoginStatusBean validateloginBean(String emailId, String password) throws Exception {
-		LoginStatusBean status = new LoginStatusBean(0,HttpStatus.OK, "Valid Request");
+		LoginStatusBean status = new LoginStatusBean(0,null,HttpStatus.OK, "Valid Request");
 
 		Exam exam = examRepository.findByPassword(password);
+		User user = userRepository.findByEmailIdIgnoreCase(emailId);
 		if (exam == null) {
 			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.INCORRECT_PASSWORD_MESSAGE);
-		} else if (exam.getTimestamp() != null && exam.getDate2() !=null && exam.getTime2()!=null) {
+		} else if (exam.getTimestamp() != null && exam.getDate2() !=null && exam.getTime2()!=null && exam.getDate1() !=null && exam.getTime1() !=null) {
 		//Date validDate = addHoursToJavaUtilDate(exam.getTimestamp(), exam.getExpiryHours());
-			
-			String format = "MM/dd/yyyy hh:mm:ss";
-			
-			SimpleDateFormat sdf = new SimpleDateFormat(format);
-			
-			Date validDate = sdf.parse(exam.getDate2() + " " + exam.getTime2() + ":00");
-			
-			String str = sdf.format(new Date());
-			Date currentDate = sdf.parse(str);
-			
-			System.out.println("currentDate " + currentDate.toString());
-			System.out.println("validDate" + validDate.toString());
-			if (currentDate.after(validDate)) {
+			String validDate = exam.getDate2() + " " + exam.getTime2() + ":00";
+			String startDateString = exam.getDate1() + " " + exam.getTime1() + ":00";
+	        SimpleDateFormat formatter=new SimpleDateFormat(Constant.DATE_FORMAT);
+	        Date endDate=formatter.parse(validDate);
+	        Date startDate=formatter.parse(startDateString);
+
+            Date currentDate = new Date();
+
+			if (currentDate.after(endDate)) {
 				status.setCode(HttpStatus.BAD_REQUEST);
 				status.setMessage(Constant.EXAM_EXPIRED_MESSAGE);
 			}
+			else if (startDate.after(currentDate)) {
+	        	long diff = startDate.getTime() - currentDate.getTime();
+	        	long diffSeconds = diff / 1000 % 60;
+	            long diffMinutes = diff / (60 * 1000) % 60;
+	            long diffHours = diff / (60 * 60 * 1000);
+	            
+	            String timeLeftString = diffHours + ":" + diffMinutes + ":" + diffSeconds;
+	            DateFormat timeFormat=new SimpleDateFormat("hh:mm:ss");
+	            Date timeLeftDate = timeFormat.parse(timeLeftString);
+	            String timeLeft = timeFormat.format(timeLeftDate);
+	            status.setMessage(Constant.EXAM_NOT_STARTED);
+	            status.setTime(timeLeft);
+			}
 		}
 				
-
-		User user = userRepository.findByEmailIdIgnoreCase(emailId);
-		if (user == null) {
+		else if (user == null) {
 			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.INVALID_USER_ID_MESSAGE);
 		}
 		
-		if(resultRepository.findByUserIdAndExamId(user.getId(), exam.getId()).isPresent()){
+		else if(resultRepository.findByUserIdAndExamId(user.getId(), exam.getId()).isPresent()){
 			status.setCode(HttpStatus.BAD_REQUEST);
 			status.setMessage(Constant.USER_ALREADY_TAKEN_EXAM);
 		}

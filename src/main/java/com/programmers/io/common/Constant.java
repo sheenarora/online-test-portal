@@ -7,6 +7,8 @@ public class Constant {
 	
 	public static final Long JWT_TOKEN_VALIDITY = (long) (5 * 60 * 60);
 	
+	public static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+	
 	
 	//status codes
 	public static final int SUCCESS_CODE = (int) 200;
@@ -27,5 +29,6 @@ public class Constant {
 	public static final String USER_NOTFOUND_MESSAGE = "User not found with ID : ";
 	public static final String EXAM_NOTFOUND_MESSAGE = "Exam not found with ID : ";
 	public static final String USER_ALREADY_TAKEN_EXAM = "User has already taken the exam.";
+	public static final String EXAM_NOT_STARTED = "Time remaining to start the exam";
 	
 }	

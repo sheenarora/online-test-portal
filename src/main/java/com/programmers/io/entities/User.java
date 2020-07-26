@@ -55,6 +55,8 @@ public class User {
 	private String city;
 
 	private double graduationPercentage;
+	
+	private Boolean isActive = true;
 
 	@UpdateTimestamp
 	public Date timestamp;
