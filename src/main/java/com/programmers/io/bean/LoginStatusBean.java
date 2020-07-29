@@ -11,7 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class LoginStatusBean {
 
-	private long id;
+	private String name;
 
 	private String startDate;
 
@@ -19,9 +19,9 @@ public class LoginStatusBean {
 
 	private String message;
 
-	public LoginStatusBean(long id, String startDate, HttpStatus code, String message) {
+	public LoginStatusBean(String name, String startDate, HttpStatus code, String message) {
 		super();
-		this.id = id;
+		this.name = name;
 		this.startDate = startDate;
 		this.code = code;
 		this.message = message;

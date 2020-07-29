@@ -18,6 +18,7 @@ import com.programmers.io.bean.LoginStatusBean;
 import com.programmers.io.bean.StatusBean;
 import com.programmers.io.common.Constant;
 import com.programmers.io.common.CustomException;
+import com.programmers.io.repository.UserRepository;
 import com.programmers.io.securityConfig.JwtTokenUtil;
 import com.programmers.io.service.LoginService;
 
@@ -33,6 +34,9 @@ public class LoginController {
 
 	@Autowired
 	private JwtTokenUtil jwtTokenUtil;
+	
+	@Autowired
+	private UserRepository userRepository;
 
 	@PostMapping
 	@CrossOrigin(origins = "*")
@@ -52,10 +56,22 @@ public class LoginController {
 				Map<String, String> ClaimsMap = loginService.login(loginBean);
 				String examId = ClaimsMap.get("ExamId");
 				String userId = ClaimsMap.get("UserId");
+				long id = Long.valueOf(userId);
+				String firstName = userRepository.findById(id).get().getFirstName();
+				String middleName = userRepository.findById(id).get().getMiddleName();
+				String lastName = userRepository.findById(id).get().getLastName();
+				
+				String userName;
+				
+				if(middleName == null)
+					userName = firstName + " " + lastName;
+				
+				else 
+					userName = firstName + " " + middleName + " " + lastName;
 
 				final String token = jwtTokenUtil.generateToken(emailId, userId, examId);
 				status.setMessage(token);
-				status.setId(Long.valueOf(userId));
+				status.setName(userName);
 				
 			}
 		} catch (CustomException e) {

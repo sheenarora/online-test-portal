@@ -58,7 +58,7 @@ public class LoginServiceImpl implements LoginService {
 	}
 
 	public LoginStatusBean validateloginBean(String emailId, String password) throws Exception {
-		LoginStatusBean status = new LoginStatusBean(0,null,HttpStatus.OK, "Valid Request");
+		LoginStatusBean status = new LoginStatusBean(null,null,HttpStatus.OK, "Valid Request");
 
 		Exam exam = examRepository.findByPassword(password);
 		User user = userRepository.findByEmailIdIgnoreCase(emailId);
