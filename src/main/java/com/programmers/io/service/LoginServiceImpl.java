@@ -88,6 +88,7 @@ public class LoginServiceImpl implements LoginService {
 //	            DateFormat timeFormat=new SimpleDateFormat("HH:mm:ss");
 //	            Date timeLeftDate = timeFormat.parse(timeLeftString);
 //	            String timeLeft = timeFormat.format(timeLeftDate);
+				status.setCode(HttpStatus.BAD_REQUEST);
 	            status.setMessage(Constant.EXAM_NOT_STARTED);
 	            status.setStartDate(startDateString);
 			}

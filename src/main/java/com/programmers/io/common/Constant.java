@@ -24,7 +24,7 @@ public class Constant {
 	public static final String INVALID_USER_ID_MESSAGE = "Invalid User Id.";
 	public static final String INVALID_QUESTION_CATEGORY_MESSAGE = "Bad Request. Invalid Question Categories.";
 	public static final String DUPLICATE_EMAIL_MESSAGE = "EmailId Already Exist.";
-	public static final String INCORRECT_PASSWORD_MESSAGE = "Incorrect password.";
+	public static final String INCORRECT_PASSWORD_MESSAGE = "Invalid exam key.";
 	public static final String EXAM_EXPIRED_MESSAGE = "Exam has Expired.";
 	public static final String USER_NOTFOUND_MESSAGE = "User not found with ID : ";
 	public static final String EXAM_NOTFOUND_MESSAGE = "Exam not found with ID : ";
